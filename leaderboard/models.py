@@ -1,15 +1,39 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django import forms
+from django.dispatch import receiver
 from authtools.models import User
 
 
 COMPETITION_LEVELS = (('novice', 'novice'), ('expert', 'expert'))
 
 
-class StudentInfo(models.Model):
+class Profile(models.Model):
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    student_id = models.IntegerField(null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+
+
+class ProfileForm(forms.ModelForm):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     student_id = models.IntegerField()
-    user = models.OneToOneField(User)
+
+    class Meta:
+        model = Profile
+        fields = ('first_name', 'last_name', 'student_id')
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
 
 
 class Competition(models.Model):

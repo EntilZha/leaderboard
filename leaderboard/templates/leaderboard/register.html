@@ -8,26 +8,41 @@
   {% else %}
   <form method="post" action="{% url 'register' %}">
     {% csrf_token %}
-    {{ form.non_field_errors }}
+    {{ user_form.non_field_errors }}
     <div class="form-group">
-      <label for="{{ form.email.id_for_label }}">Email address</label>
-      <input name="email" type="email" class="form-control" id="{{ form.email.id_for_label }}" placeholder="Email">
-      {{ form.email.errors }}
+      <label for="{{ user_form.email.id_for_label }}">Email address</label>
+      <input name="email" type="email" class="form-control" id="{{ user_form.email.id_for_label }}" placeholder="Email">
+      {{ user_form.email.errors }}
     </div>
     <div class="form-group">
-      <label for="{{ form.name.id_for_label }}">Name</label>
-      <input name="name" type="text" class="form-control" id="{{ form.name.id_for_label }}" placeholder="Name">
-      {{ form.name.errors }}
+      <label for="{{ user_form.name.id_for_label }}">Display Name</label>
+      <input name="name" type="text" class="form-control" id="{{ user_form.name.id_for_label }}" placeholder="Display Name">
+      {{ user_form.name.errors }}
     </div>
     <div class="form-group">
-      <label for="{{ form.password1.id_for_label }}">Password</label>
-      <input name="password1" type="password" class="form-control" id="{{ form.password1.id_for_label }}" placeholder="Password">
-      {{ form.password1.errors }}
+      <label for="{{ profile_form.first_name.id_for_label }}">First Name</label>
+      <input name="first_name" type="text" class="form-control" id="{{ profile_form.first_name.id_for_label }}" placeholder="First Name">
+      {{ profile_form.first_name.errors }}
     </div>
     <div class="form-group">
-      <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
-      <input name="password2" type="password" class="form-control" id="{{ form.password2.id_for_label }}" placeholder="Password">
-      {{ form.password2.errors }}
+      <label for="{{ profile_form.last_name.id_for_label }}">Last Name</label>
+      <input name="last_name" type="text" class="form-control" id="{{ profile_form.last_name.id_for_label }}" placeholder="Last Name">
+      {{ profile_form.last_name.errors }}
+    </div>
+    <div class="form-group">
+      <label for="{{ profile_form.student_id.id_for_label }}">Student ID</label>
+      <input name="student_id" type="text" class="form-control" id="{{ profile_form.student_id.id_for_label }}" placeholder="Student ID">
+      {{ profile_form.student_id.errors }}
+    </div>
+    <div class="form-group">
+      <label for="{{ user_form.password1.id_for_label }}">Password</label>
+      <input name="password1" type="password" class="form-control" id="{{ user_form.password1.id_for_label }}" placeholder="Password">
+      {{ user_form.password1.errors }}
+    </div>
+    <div class="form-group">
+      <label for="{{ user_form.password2.id_for_label }}">Confirm Password</label>
+      <input name="password2" type="password" class="form-control" id="{{ user_form.password2.id_for_label }}" placeholder="Password">
+      {{ user_form.password2.errors }}
     </div>
     <button type="submit" class="btn btn-default">Submit</button>
   </form>
