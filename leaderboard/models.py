@@ -9,7 +9,7 @@ class StudentInfo(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     student_id = models.IntegerField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User)
 
 
 class Competition(models.Model):
