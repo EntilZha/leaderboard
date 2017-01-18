@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'authtools',
     'leaderboard'
 ]
 
@@ -90,8 +89,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'authtools.User'
-AUTH_PROFILE_MODULE = 'leaderboard.models.StudentInfo'
+AUTH_PROFILE_MODULE = 'leaderboard.models.Profile'
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
