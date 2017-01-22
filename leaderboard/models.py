@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.dispatch import receiver
 
@@ -8,19 +9,27 @@ from django.dispatch import receiver
 COMPETITION_LEVELS = (('novice', 'novice'), ('expert', 'expert'))
 
 
+class CustomUserCreationForm(UserCreationForm):
+    email = forms.EmailField()
+    first_name = forms.CharField()
+    last_name = forms.CharField()
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name')
+
+
 class Profile(models.Model):
-    student_id = models.IntegerField(null=True, unique=True)
-    email = models.EmailField(unique=True)
+    student_id = models.IntegerField(null=True, unique=True, default=-1)
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
 
 
 class ProfileForm(forms.ModelForm):
-    email = models.EmailField(unique=True)
-    student_id = models.IntegerField(unique=True)
+    student_id = forms.IntegerField()
 
     class Meta:
         model = Profile
-        fields = ('email', 'student_id')
+        fields = ('student_id',)
 
 
 @receiver(post_save, sender=User)
