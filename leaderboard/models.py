@@ -5,6 +5,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.dispatch import receiver
 
+from pytz import timezone
+
 
 COMPETITION_LEVELS = (('novice', 'novice'), ('expert', 'expert'))
 
@@ -22,6 +24,9 @@ class CustomUserCreationForm(UserCreationForm):
 class Profile(models.Model):
     student_id = models.IntegerField(null=True, unique=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+
+    def __str__(self):
+        return 'Profile(username={}, student_id={})'.format(self.user.username, self.student_id)
 
 
 class ProfileForm(forms.ModelForm):
@@ -50,11 +55,25 @@ class Competition(models.Model):
     end_date = models.DateTimeField()
     level = models.CharField(max_length=20, choices=COMPETITION_LEVELS)
 
+    def __str__(self):
+        mst = timezone('America/Denver')
+        start = self.start_date.astimezone(mst)
+        end = self.end_date.astimezone(mst)
+        return 'Competition(name={}, level={}, start={:%b %d %Y %I%p} MST, end={:%b %d %Y %I%p} ' \
+               'MST)'.format(self.name, self.level, start, end)
+
 
 class Team(models.Model):
     name = models.CharField(max_length=50)
     competition = models.ForeignKey(Competition, on_delete=models.CASCADE)
-    users = models.ManyToManyField(User)
+    members = models.ManyToManyField(User)
+
+    def __str__(self):
+        return 'Team(name={}, competition={}, members=[{}])'.format(
+            self.name,
+            self.competition.name,
+            ','.join([m.username for m in self.members.all()])
+        )
 
 
 class Submission(models.Model):
