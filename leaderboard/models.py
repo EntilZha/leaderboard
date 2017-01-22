@@ -11,8 +11,8 @@ COMPETITION_LEVELS = (('novice', 'novice'), ('expert', 'expert'))
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField()
-    first_name = forms.CharField()
-    last_name = forms.CharField()
+    first_name = forms.CharField(min_length=1)
+    last_name = forms.CharField(min_length=1)
 
     class Meta:
         model = User
@@ -20,7 +20,7 @@ class CustomUserCreationForm(UserCreationForm):
 
 
 class Profile(models.Model):
-    student_id = models.IntegerField(null=True, unique=True, default=-1)
+    student_id = models.IntegerField(null=True, unique=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
 
 

@@ -1,9 +1,14 @@
 from django.conf.urls import url
+from django.contrib.auth.views import login, logout
+from django.contrib.auth.forms import AuthenticationForm
 
-from . import views
+from leaderboard import views
 
 urlpatterns = [
     url(r'^register/$', views.register, name='register'),
-    url(r'^login/$', views.login, name='login'),
-    url(r'^logout/$', views.logout, name='login')
+    url(r'^login/$', login, {
+        'template_name': 'register.html',
+        'authentication_form': AuthenticationForm
+    }, name='login'),
+    url(r'^logout/$', logout, {'next_page': '/'})
 ]

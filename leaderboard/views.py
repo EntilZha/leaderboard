@@ -1,7 +1,5 @@
 from django.shortcuts import render, redirect
 from django.db.transaction import atomic
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib import auth
 
 from leaderboard.models import ProfileForm, CustomUserCreationForm
 
@@ -29,20 +27,3 @@ def register(request):
         'user_form': user_form,
         'profile_form': profile_form
     })
-
-
-def login(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(request)
-        if form.is_valid():
-            auth.login(request, form.get_user())
-            return redirect('/')
-        else:
-            return redirect('/')
-    else:
-        return redirect('/')
-
-
-def logout(request):
-    auth.logout(request)
-    return redirect('/')

@@ -1,3 +1,4 @@
 data/
 nb_images/
 *.pyc
+leaderboard/migrations
