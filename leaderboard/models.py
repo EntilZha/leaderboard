@@ -1,4 +1,3 @@
-import importlib
 
 from django.db import models
 from django.db.models.signals import post_save
@@ -9,17 +8,12 @@ from django.dispatch import receiver
 
 from pytz import timezone
 
+from scoring.abstract import get_class
+
 
 COMPETITION_LEVELS = (('novice', 'novice'), ('expert', 'expert'))
 
 SCORING_CLASSES = [('scoring.DefaultScoring', 'scoring.DefaultScoring')]
-
-
-def get_class(instance_module_class: str):
-    instance_module, instance_class = instance_module_class.rsplit('.')
-    py_instance_module = importlib.import_module(instance_module)
-    py_instance_class = getattr(py_instance_module, instance_class)
-    return py_instance_class
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -144,29 +138,29 @@ class Submission(models.Model):
 
 
 class NewSubmissionForm(forms.Form):
-    competition = forms.IntegerField()
-    team = forms.IntegerField()
     name = forms.CharField(max_length=100, widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Name'}
     ))
     description = forms.CharField(widget=forms.Textarea(
         attrs={'class': 'form-control', 'placeholder': 'Description', 'rows': 3}
-    ))
-    submission_file = forms.FileField(required=True)
+    ), min_length=0, required=False)
+    submission_file = forms.FileField()
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
+        self.team_id = kwargs.pop('team_id', None)
+        self.competition_id = kwargs.pop('competition_id', None)
         super(NewSubmissionForm, self).__init__(*args, **kwargs)
 
     def clean(self):
         super(NewSubmissionForm, self).clean()
-        user_team = self.request.user.team_set.filter(id=self.team).first()
+        if self.team_id is None or self.competition_id is None:
+            raise forms.ValidationError('A team and competition id are required')
+        user_team = self.request.user.team_set.filter(id=self.team_id).first()
         if user_team is None:
             raise forms.ValidationError('Submitting for a team you are not on is not allowed!')
-        if self.competition != user_team.competition.id:
+        if self.competition_id != user_team.competition.id:
             raise forms.ValidationError(
                 'The team you are submitting for is not part of this competition')
-        print('validating...')
-        print(self.cleaned_data['submission_file'])
         return self.cleaned_data
 

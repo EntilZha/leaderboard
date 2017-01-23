@@ -1,10 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import render, redirect
-from django.views import View
 from django.views.decorators.http import require_GET, require_http_methods
+from django.utils import timezone
 
-from leaderboard.models import Competition, NewSubmissionForm
+from leaderboard.models import Competition, NewSubmissionForm, Submission
+from scoring.abstract import get_class
 
 
 @require_GET
@@ -50,22 +51,44 @@ def new_submission(request, competition_name=None):
             competition_name))
         return redirect('/')
 
-    if request.GET:
-        form = NewSubmissionForm()
-        form.fields['competition'] = comp.id
-        user_team = request.user.team_set.filter(competition_id=comp.id).first()
+    user_team = request.user.team_set.filter(competition_id=comp.id).first()
+    if request.method == 'GET':
         if user_team is None:
             messages.error(
                 request,
                 'You are not on a team for this competition yet, contact an admin to join a team')
             return redirect('/')
-        form.fields['team'] = user_team.id
+        form = NewSubmissionForm()
     else:
-        form = NewSubmissionForm(request=request)
-        print(request)
+        form = NewSubmissionForm(
+            request.POST,
+            request.FILES,
+            request=request,
+            team_id=user_team.id,
+            competition_id=comp.id
+        )
         if form.is_valid():
-            messages.info(request, 'Submission successful!')
-            return redirect('/')
-        else:
-            print(form.fields['competition'])
+            submission_content = form.cleaned_data['submission_file'].read().decode('utf-8')
+            py_score_class = get_class(comp.scoring_class)
+            score_inst = py_score_class()
+            sub_validation, error = score_inst.validate(submission_content)
+            if sub_validation:
+                public_score, private_score, error = score_inst.score(submission_content)
+                if error is None:
+                    submission = Submission(
+                        competition_id=comp.id,
+                        team_id=user_team.id,
+                        public_score=public_score,
+                        private_score=private_score,
+                        submission_time=timezone.now(),
+                        name=form.cleaned_data['name'],
+                        description=form.cleaned_data['description']
+                    )
+                    submission.save()
+                    messages.info(request, 'Submission successful!')
+                    return redirect('/competition/{}'.format(competition_name))
+                else:
+                    messages.error(request, error)
+            else:
+                messages.error(request, error)
     return render(request, 'leaderboard/competition/submit.html', {'form': form})

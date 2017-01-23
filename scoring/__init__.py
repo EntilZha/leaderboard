@@ -7,7 +7,7 @@ class DefaultScoring(AbstractScoring):
         return True
 
     def validate(self, submission_text: str):
-        return True, ''
+        return True, None
 
     def score(self, submission_text: str):
-        return 1, ''
+        return 2, 1, None
