@@ -12,5 +12,6 @@ urlpatterns = [
         'authentication_form': AuthenticationForm
     }, name='login'),
     url(r'^logout/$', logout, {'next_page': '/'}),
-    url(r'^user/competitions/$', competitions.user_competitions)
+    url(r'^user/teams/$', competitions.teams),
+    url(r'^user/profile/(?P<username>[\w.@+-]+)/', users.profile)
 ]

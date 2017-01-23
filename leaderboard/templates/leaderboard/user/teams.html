@@ -1,0 +1,31 @@
+{% extends "leaderboard/page.html" %}
+
+{% block title %}Your Teams and Competitions{% endblock %}
+
+{% block content %}
+
+  <h1>Your Teams and Competitions</h1>
+  <table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Competition</th>
+    <th>Team Name</th>
+    <th>Members</th>
+    <th>Level</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for t in teams %}
+    <tr>
+      <td>{{ t.competition.name }}</td>
+      <td>{{ t.name }}</td>
+      <td>
+        {% for m in t.members.all %}{% if forloop.first %}{{ m.username }}{% else %}, {{ m.username }}{% endif %}{% endfor %}
+      </td>
+      <td>{{ t.competition.level }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+  </table>
+
+{% endblock %}

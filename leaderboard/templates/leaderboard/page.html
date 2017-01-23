@@ -44,8 +44,8 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Account <span class="caret"></span></a>
               <ul class="dropdown-menu">
+                <li><a href="/user/profile/{{ user.username }}/">Profile</a></li>
                 <li><a href="/user/teams/">My Teams</a></li>
-                <li><a href="/user/competitions/">My Competitions</a></li>
                 <li><a href="/logout/">Logout</a></li>
               </ul>
             </li>
@@ -64,6 +64,13 @@
     </nav>
 
     <div class="container content" role="main">
+      {% if messages %}
+        <div class="row">
+        {% for message in messages %}
+          <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
+        {% endfor %}
+        </div>
+      {% endif %}
       {% block content %}{% endblock %}
     </div>
 
