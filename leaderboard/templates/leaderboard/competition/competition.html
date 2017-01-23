@@ -14,11 +14,18 @@
   </tr>
   </thead>
   <tbody>
-  {% for t in competition.team_set.all %}
+  {% for score, team in paired_scores %}
     <tr>
       <td>{{ forloop.counter }}</td>
+      <td>{{ team.name }}</td>
+      <td>{{ score }}</td>
+    </tr>
+  {% endfor %}
+  {% for t in no_submission_teams %}
+    <tr class="danger">
+      <td></td>
       <td>{{ t.name }}</td>
-      <td>0</td>
+      <td>No Submissions</td>
     </tr>
   {% endfor %}
   </tbody>

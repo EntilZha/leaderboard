@@ -24,4 +24,9 @@ def competition(request, competition_name=None):
             competition_name))
         return redirect('/')
     else:
-        return render(request, 'leaderboard/competition/competition.html', {'competition': comp})
+        paired_scores, no_submission_teams = comp.leaderboard_submissions()
+        return render(request, 'leaderboard/competition/competition.html', {
+            'competition': comp,
+            'paired_scores': paired_scores,
+            'no_submission_teams': no_submission_teams
+        })
