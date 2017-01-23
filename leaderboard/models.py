@@ -86,12 +86,12 @@ class Competition(models.Model):
                 if t.leaderboard_submission is None:
                     no_submission_teams.append(t)
                 else:
-                    paired_scores.append((t.leaderboard_submission.score, t))
+                    paired_scores.append((t.leaderboard_submission.public_score, t))
             else:
                 if t.best_private_submission is None:
                     no_submission_teams.append(t)
                 else:
-                    paired_scores.append((t.best_private_submission.score, t))
+                    paired_scores.append((t.best_private_submission.private_score, t))
 
         sorted_scores = sorted(paired_scores, reverse=score_inst.higher_better)
 
@@ -132,10 +132,41 @@ class Team(models.Model):
 class Submission(models.Model):
     competition = models.ForeignKey(Competition, on_delete=models.CASCADE)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
-    score = models.FloatField()
+    public_score = models.FloatField()
+    private_score = models.FloatField()
     submission_time = models.DateTimeField()
+    name = models.CharField(max_length=100, null=True)
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return 'Submission(competition={}, team={}, score={})'.format(
-            self.competition.name, self.team.name, self.score)
+        return 'Submission(competition={}, team={}, name={}, public_score={})'.format(
+            self.competition.name, self.team.name, self.name, self.public_score)
+
+
+class NewSubmissionForm(forms.Form):
+    competition = forms.IntegerField()
+    team = forms.IntegerField()
+    name = forms.CharField(max_length=100, widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Name'}
+    ))
+    description = forms.CharField(widget=forms.Textarea(
+        attrs={'class': 'form-control', 'placeholder': 'Description', 'rows': 3}
+    ))
+    submission_file = forms.FileField(required=True)
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(NewSubmissionForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        super(NewSubmissionForm, self).clean()
+        user_team = self.request.user.team_set.filter(id=self.team).first()
+        if user_team is None:
+            raise forms.ValidationError('Submitting for a team you are not on is not allowed!')
+        if self.competition != user_team.competition.id:
+            raise forms.ValidationError(
+                'The team you are submitting for is not part of this competition')
+        print('validating...')
+        print(self.cleaned_data['submission_file'])
+        return self.cleaned_data
+

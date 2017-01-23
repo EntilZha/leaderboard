@@ -4,7 +4,22 @@
 
 {% block content %}
 
-  <h1>{{ competition.name }} Competition Leaderboard</h1>
+  <div class="row">
+    <div class="col-md-10">
+      <h1>{{ competition.name }} Competition Leaderboard</h1>
+    </div>
+    <div class="col-md-2">
+      <a href="/competition/{{ competition.name }}/submit/" class="btn btn-info" style="margin-top:25px">Make a Submission</a>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-md-12">
+      <h4>Competition Description and Information</h4>
+      <p>{{ competition.description }}</p>
+    </div>
+  </div>
+
   <table class="table table-striped">
   <thead>
   <tr>
