@@ -13,5 +13,6 @@ urlpatterns = [
     }, name='login'),
     url(r'^logout/$', logout, {'next_page': '/'}),
     url(r'^user/teams/$', competitions.teams),
-    url(r'^user/profile/(?P<username>[\w.@+-]+)/', users.profile)
+    url(r'^user/profile/(?P<username>[\w.@+-]+)/', users.profile),
+    url(r'^competition/(?P<competition_name>[a-zA-Z ]+)/', competitions.competition)
 ]

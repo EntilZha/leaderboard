@@ -1,0 +1,27 @@
+{% extends "leaderboard/page.html" %}
+
+{% block title %}{{ competition.name }}Competitions{% endblock %}
+
+{% block content %}
+
+  <h1>{{ competition.name }} Competition Leaderboard</h1>
+  <table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Rank</th>
+    <th>Team</th>
+    <th>Score</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for t in competition.team_set.all %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ t.name }}</td>
+      <td>0</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+  </table>
+
+{% endblock %}

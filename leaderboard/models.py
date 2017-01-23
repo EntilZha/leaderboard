@@ -54,6 +54,7 @@ class Competition(models.Model):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     level = models.CharField(max_length=20, choices=COMPETITION_LEVELS)
+    best_submission = models.ForeignKey('Submission', null=True, related_name='+', blank=True)
 
     def __str__(self):
         mst = timezone('America/Denver')

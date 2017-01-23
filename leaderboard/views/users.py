@@ -34,10 +34,9 @@ def profile(request, username=None):
     if username is None:
         messages.error(request, 'User with username "{}" does not exist'.format(username))
         return redirect('/')
+    user = User.objects.filter(username=username).first()
+    if user is None:
+        messages.error(request, 'User with username "{}" does not exist'.format(username))
+        return redirect('/')
     else:
-        user = User.objects.filter(username=username).first()
-        if user is None:
-            messages.error(request, 'User with username "{}" does not exist'.format(username))
-            return redirect('/')
-        else:
-            return render(request, 'leaderboard/user/profile.html', {'profile_user': user})
+        return render(request, 'leaderboard/user/profile.html', {'profile_user': user})
