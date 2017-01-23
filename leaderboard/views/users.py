@@ -1,11 +1,8 @@
 from django.shortcuts import render, redirect
 from django.db.transaction import atomic
+from django.contrib.auth import login
 
 from leaderboard.models import ProfileForm, CustomUserCreationForm
-
-
-def index(request):
-    return render(request, 'leaderboard/index.html')
 
 
 @atomic
@@ -19,6 +16,7 @@ def register(request):
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.save()
+            login(request, user)
             return redirect('/')
     else:
         user_form = CustomUserCreationForm()

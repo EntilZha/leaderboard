@@ -69,10 +69,15 @@ class Team(models.Model):
     members = models.ManyToManyField(User)
 
     def __str__(self):
+        competition_name = self.competition.name if self.competition_id is not None else None
+        if competition_name is None:
+            members = []
+        else:
+            members = self.members.all()
         return 'Team(name={}, competition={}, members=[{}])'.format(
             self.name,
-            self.competition.name,
-            ','.join([m.username for m in self.members.all()])
+            competition_name,
+            ','.join([m.username for m in members])
         )
 
 
