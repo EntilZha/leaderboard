@@ -110,6 +110,14 @@ class Team(models.Model):
         else:
             return self.best_public_submission
 
+    def update_best_submissions(self, higher_better: bool):
+        submissions = self.submission_set.all()
+        best_public = sorted(submissions, reverse=higher_better, key=lambda s: s.public_score)[0]
+        best_private = sorted(submissions, reverse=higher_better, key=lambda s: s.private_score)[0]
+        self.best_public_submission = best_public
+        self.best_private_submission = best_private
+        self.save()
+
     def __str__(self):
         competition_name = self.competition.name if self.competition_id is not None else None
         if competition_name is None:

@@ -85,6 +85,7 @@ def new_submission(request, competition_name=None):
                         description=form.cleaned_data['description']
                     )
                     submission.save()
+                    user_team.update_best_submissions(score_inst.higher_better)
                     messages.info(request, 'Submission successful!')
                     return redirect('/competition/{}'.format(competition_name))
                 else:
