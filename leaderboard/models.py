@@ -97,11 +97,11 @@ class Team(models.Model):
     competition = models.ForeignKey(Competition, on_delete=models.CASCADE)
     members = models.ManyToManyField(User)
     selected_submission = models.ForeignKey(
-        'Submission', null=True, related_name='+', blank=True)
+        'Submission', null=True, related_name='+', blank=True, on_delete=models.SET_NULL)
     best_public_submission = models.ForeignKey(
-        'Submission', null=True, related_name='+', blank=True)
+        'Submission', null=True, related_name='+', blank=True, on_delete=models.SET_NULL)
     best_private_submission = models.ForeignKey(
-        'Submission', null=True, related_name='+', blank=True)
+        'Submission', null=True, related_name='+', blank=True, on_delete=models.SET_NULL)
 
     @property
     def leaderboard_submission(self):
@@ -124,8 +124,8 @@ class Team(models.Model):
 
 
 class Submission(models.Model):
-    competition = models.ForeignKey(Competition, on_delete=models.CASCADE)
-    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    competition = models.ForeignKey(Competition, on_delete=models.DO_NOTHING)
+    team = models.ForeignKey(Team, on_delete=models.DO_NOTHING)
     public_score = models.FloatField()
     private_score = models.FloatField()
     submission_time = models.DateTimeField()
