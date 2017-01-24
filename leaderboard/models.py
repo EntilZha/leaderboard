@@ -134,8 +134,8 @@ class Team(models.Model):
 
 
 class Submission(models.Model):
-    competition = models.ForeignKey(Competition, on_delete=models.DO_NOTHING)
-    team = models.ForeignKey(Team, on_delete=models.DO_NOTHING)
+    competition = models.ForeignKey(Competition, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
     public_score = models.FloatField()
     private_score = models.FloatField()
     submission_time = models.DateTimeField()
