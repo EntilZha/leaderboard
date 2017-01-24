@@ -77,15 +77,17 @@ class Competition(models.Model):
         no_submission_teams = []
         for t in teams:
             if public:
-                if t.leaderboard_submission is None:
+                if t.best_public_submission is None:
                     no_submission_teams.append(t)
                 else:
-                    paired_scores.append((t.leaderboard_submission.public_score, t))
+                    paired_scores.append(
+                        (t.best_public_submission.public_score, t, t.best_public_submission))
             else:
                 if t.best_private_submission is None:
                     no_submission_teams.append(t)
                 else:
-                    paired_scores.append((t.best_private_submission.private_score, t))
+                    paired_scores.append(
+                        (t.best_private_submission.private_score, t, t.best_private_submission))
 
         sorted_scores = sorted(paired_scores, reverse=score_inst.higher_better)
 

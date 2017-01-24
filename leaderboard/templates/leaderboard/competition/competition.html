@@ -26,21 +26,27 @@
     <th>Rank</th>
     <th>Team</th>
     <th>Score</th>
+    <th>Best Submission Time</th>
+    <th>Number of Submissions</th>
   </tr>
   </thead>
   <tbody>
-  {% for score, team in paired_scores %}
+  {% for score, team, submission in paired_scores %}
     <tr>
       <td>{{ forloop.counter }}</td>
       <td>{{ team.name }}</td>
       <td>{{ score }}</td>
+      <td>{{ submission.submission_time }}</td>
+      <td>{{ team.submission_set.count }}</td>
     </tr>
   {% endfor %}
   {% for t in no_submission_teams %}
     <tr class="danger">
       <td></td>
       <td>{{ t.name }}</td>
-      <td>No Submissions</td>
+      <td>-</td>
+      <td>-</td>
+      <td>0</td>
     </tr>
   {% endfor %}
   </tbody>
