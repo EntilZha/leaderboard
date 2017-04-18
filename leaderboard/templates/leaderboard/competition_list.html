@@ -1,0 +1,8 @@
+<h1>Competitions</h1>
+<ul>
+{% for competition in object_list %}
+    <li>{{ competition.name }}</li>
+{% empty %}
+    <li>No competitions yet.</li>
+{% endfor %}
+</ul>

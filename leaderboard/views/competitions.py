@@ -2,10 +2,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_GET, require_http_methods
+from django.views.generic.list import ListView
 from django.utils import timezone
 
 from leaderboard.models import Competition, NewSubmissionForm, Submission
 from scoring.abstract import get_class
+
+
+class CompetitionListView(ListView):
+    model = Competition
 
 
 @require_GET
