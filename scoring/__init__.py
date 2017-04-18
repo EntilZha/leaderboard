@@ -10,4 +10,4 @@ class DefaultScoring(AbstractScoring):
         return True, None
 
     def score(self, submission_text: str):
-        return 2, 1, None
+        return 0, 0, None
