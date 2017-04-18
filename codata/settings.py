@@ -26,7 +26,7 @@ SECRET_KEY = '4jd0sjb&g_)fs3s!=^68!c81ds6&ochr%$4@fm#+ds&4km2#lz'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['leaderboard.entilzha.io']
 
 
 # Application definition
