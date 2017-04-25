@@ -2,3 +2,5 @@ data/
 nb_images/
 *.pyc
 leaderboard/migrations
+scoring/all_test_labels.txt
+scoring/public_validation_event_ids.pkl
