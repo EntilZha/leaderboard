@@ -13,7 +13,10 @@ from scoring.abstract import get_class
 
 COMPETITION_LEVELS = (('novice', 'novice'), ('expert', 'expert'))
 
-SCORING_CLASSES = [('scoring.DefaultScoring', 'scoring.DefaultScoring')]
+SCORING_CLASSES = [
+    ('scoring.DefaultScoring', 'scoring.DefaultScoring'),
+    ('scoring.AppthisAUCScoring', 'scoring.AppthisAUCScoring'),
+]
 
 
 class CustomUserCreationForm(UserCreationForm):

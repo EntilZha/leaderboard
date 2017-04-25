@@ -1,5 +1,5 @@
 from scoring.abstract import AbstractScoring
-
+from scoring.appthis import *
 
 class DefaultScoring(AbstractScoring):
     @property
