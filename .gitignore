@@ -4,3 +4,4 @@ nb_images/
 leaderboard/migrations
 scoring/all_test_labels.txt
 scoring/public_validation_event_ids.pkl
+scoring/all_validation_labels.txt
